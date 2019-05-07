@@ -1,0 +1,65 @@
+---
+  - name: install packages
+    yum: 
+      name: "{{ item }}"
+      state: installed
+    with_items:
+      - java-1.8.0
+      - http://repo.rundeck.org/latest.rpm
+      - libsemanage-python
+
+  - name: install rundeck
+    yum:
+      name: rundeck
+      state: installed
+
+  - name: set rundeck to be enabled at boot and start it
+    systemd:
+      name: rundeckd
+      enabled: yes
+      state: started
+      daemon_reload: yes
+
+  - name: set firewalld to be enabled at boot and start it
+    systemd:
+      name: firewalld
+      enabled: yes
+      state: started
+
+  - name: enable https port in the firewall
+    firewalld:
+      port: 4440/tcp
+      state: enabled
+      permanent: yes
+      immediate: yes
+
+  - name: set seboolean httpd to allow network connections
+    seboolean:
+      name: httpd_can_network_connect
+      state: yes
+      persistent: yes
+
+  - name: Create a rundeck project
+    rundeck_project:
+      name: "monitoring"
+      api_version: 18
+      url: "http://localhost:4440/"
+      token: "jCUcEo8GsgVVd87Ph6VBmweiVIVTuKqp"
+      state: present
+
+  - name: configure rundeck project
+    template: src=../templates/project.properties dest=/var/rundeck/projects/monitoring/etc/project.properties
+
+  - name: create settings file for nodes
+    template: src=../templates/ressource.xml dest=/var/rundeck/projects/monitoring/etc/ressource.xml
+  
+  - name: ansible create directory example
+    file:
+      path: /var/lib/rundeck/var/storage/content/keys
+      state: directory
+
+  - name: export rundeck password
+    copy: src=../files/rundeck.password  dest=/var/lib/rundeck/var/storage/content/keys/rundeck.password
+
+  - name: restart rundeck
+    service: name=rundeckd state=restarted
