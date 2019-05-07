@@ -5,5 +5,7 @@
   notify: Apache restart
 
 - name: set Apache reverse proxy configuration
-  template: src=apache_reverse_proxy.conf dest=/etc/httpd/conf/httpd.conf
-  notify: Apache restart
+  template: src=../templates/apache_reverse_proxy.conf dest=/etc/httpd/conf/httpd.conf
+
+- name: Apache restart
+  service: name=httpd state=restarted
