@@ -2,7 +2,7 @@
 # illustration. These comments are overkill for most inventory files.
 
 # Apache
-[apache-server]
+[apache-servers]
 192.168.100.20
 
 # Tomcat
