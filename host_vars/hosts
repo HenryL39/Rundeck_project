@@ -9,10 +9,6 @@
 [tomcat-server]
 192.168.100.22
 
-# MySQL
-[sql-server]
-192.168.100.23
-
 # RunDeck
 [rundeck]
 192.168.100.21
@@ -21,7 +17,6 @@
 [all:children]
 apache-server
 tomcat-server
-sql-server
 rundeck
 
 # Variables that will be applied to all servers

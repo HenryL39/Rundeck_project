@@ -2,7 +2,6 @@
 # tasks file for apache
 - name: Install apache
   yum: name=httpd state=present
-  notify: Apache restart
 
 - name: set Apache reverse proxy configuration
   template: src=../templates/apache_reverse_proxy.conf dest=/etc/httpd/conf/httpd.conf
