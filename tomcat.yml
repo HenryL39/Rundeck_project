@@ -1,9 +1,7 @@
 ---
-#apache.yml calls the main.yml task file to do all necessary tasks to install and configure Rundeck
+#tomcat.yml calls the main.yml task file to do all necessary tasks to install and configure Tomcat
 - name: Install apache
   hosts: tomcat-server
-  become: True
-  become_method: sudo
   tasks:
   - name: Install Tomcat
     include: roles/tomcat/tasks/main.yml
