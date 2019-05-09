@@ -2,6 +2,5 @@
 #tomcat.yml calls the main.yml task file to do all necessary tasks to install and configure Tomcat
 - name: Install apache
   hosts: tomcat-server
-  tasks:
-  - name: Install Tomcat
-    include: roles/tomcat/tasks/main.yml
+  roles:
+    - tomcat

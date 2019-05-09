@@ -1,5 +1,2 @@
 ---
 # handlers file for rundeck
-- name: restart rundeck
-  service: rundeckd
-    state: restarted

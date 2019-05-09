@@ -2,6 +2,5 @@
 #apache.yml calls the main.yml task file to do all necessary tasks to install apache
 - name: Install apache
   hosts: apache-servers
-  tasks:
-  - name: Install Apache
-    include: roles/apache/tasks/main.yml
+  roles:
+    - apache
