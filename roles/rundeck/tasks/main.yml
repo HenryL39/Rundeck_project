@@ -20,6 +20,17 @@
       state: started
       daemon_reload: yes
 
+  - name: wait for rundeck to be started
+    wait_for:
+      timeout: 300
+
+  - name: install rundeck cli
+    shell: '{{ item }}'
+    with_items:
+      - sudo wget https://bintray.com/rundeck/rundeck-rpm/rpm -O bintray.repo
+      - sudo mv bintray.repo /etc/yum.repos.d/
+      - sudo yum install -y rundeck-cli
+
   - name: set firewalld to be enabled at boot and start it
     systemd:
       name: firewalld
@@ -40,12 +51,22 @@
       persistent: yes
 
   - name: Create a rundeck project
-    rundeck_project:
-      name: "monitoring"
-      api_version: 18
-      url: "http://localhost:4440/"
-      token: "jCUcEo8GsgVVd87Ph6VBmweiVIVTuKqp"
-      state: present
+    shell: rd projects create -p monitoring
+    environment:
+      RD_URL: http://192.168.100.21:4440/
+      RD_USER: admin
+      RD_PASSWORD: admin
+
+  - name: export rundeck password
+    copy: src=../files/rundeck.password  dest=/tmp/rundeck.password
+
+  - name: Add rundeck key
+    shell: rd keys create -f /tmp/rundeck.password -t password -p keys/rundeck.password
+    environment:
+      RD_URL: http://192.168.100.21:4440/
+      RD_USER: admin
+      RD_PASSWORD: admin
+    
 
   - name: configure rundeck project
     template: src=../templates/project.properties dest=/var/rundeck/projects/monitoring/etc/project.properties
@@ -58,8 +79,15 @@
       path: /var/lib/rundeck/var/storage/content/keys
       state: directory
 
-  - name: export rundeck password
-    copy: src=../files/rundeck.password  dest=/var/lib/rundeck/var/storage/content/keys/rundeck.password
+  - name: configure rundeck job
+    template: src=../templates/jobs.xml dest=/tmp/jobs.xml
+
+  - name: load rundeck job
+    shell: "rd jobs load -p monitoring --file /tmp/jobs.xml"
+    environment:
+      RD_URL: http://192.168.100.21:4440/
+      RD_USER: admin
+      RD_PASSWORD: admin
 
   - name: restart rundeck
     service: name=rundeckd state=restarted

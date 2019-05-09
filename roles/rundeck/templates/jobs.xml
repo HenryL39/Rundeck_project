@@ -1,0 +1,24 @@
+<joblist>
+  <job>
+    <name>Tomcat logs add</name>
+    <description>Add logs in tomcat serv</description>
+    <context>
+      <project>monitoring</project>
+    </context>
+    <sequence>
+      <command>
+        <!-- the Unix 'who' command -->
+        <exec>who</exec>
+      </command>
+     </sequence>
+    <nodefilters excludeprecedence="true">
+      <include>
+        <name>Tomcat2</name>
+      </include>
+    </nodefilters>
+    <dispatch>
+      <threadcount>1</threadcount>
+      <keepgoing>true</keepgoing>
+    </dispatch>
+  </job>
+</joblist>
