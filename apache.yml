@@ -2,7 +2,6 @@
 #apache.yml calls the main.yml task file to do all necessary tasks to install apache
 - name: Install apache
   hosts: apache-servers
-  become: True
   become_method: sudo
   tasks:
   - name: Install Apache
