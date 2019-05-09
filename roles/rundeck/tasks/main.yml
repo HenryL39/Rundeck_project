@@ -56,6 +56,7 @@
       RD_URL: http://192.168.100.21:4440/
       RD_USER: admin
       RD_PASSWORD: admin
+    ignore_errors: yes
 
   - name: export rundeck password
     copy: src=../files/rundeck.password  dest=/tmp/rundeck.password
@@ -66,6 +67,7 @@
       RD_URL: http://192.168.100.21:4440/
       RD_USER: admin
       RD_PASSWORD: admin
+    ignore_errors: yes
     
 
   - name: configure rundeck project
@@ -88,6 +90,7 @@
       RD_URL: http://192.168.100.21:4440/
       RD_USER: admin
       RD_PASSWORD: admin
+    ignore_errors: yes
 
   - name: restart rundeck
     service: name=rundeckd state=restarted
