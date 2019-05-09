@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+<node name="Tomcat2"
+  osFamily="unix"
+  username="vagrant"
+  hostname="192.168.100.22"
+  ssh-authentication="password"
+  ssh-password-storage-path="keys/rundeck.password"
+  />
+</project>
